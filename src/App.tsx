@@ -1,8 +1,20 @@
 import React from 'react';
 import './reset.css';
 
+// routers
+import { Routes, Route } from 'react-router-dom';
+
+// pages
+import { CanvasStarterPage } from '@/pages';
+
 function App() {
-  return <div>테스트 캔버스 앱 develop</div>;
+  return (
+    <>
+      <Routes>
+        <Route path="canvas-starter" element={<CanvasStarterPage />} />
+      </Routes>
+    </>
+  );
 }
 
 export default App;
