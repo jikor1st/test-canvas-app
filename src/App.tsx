@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import './reset.css';
 
 // routers
 import { Routes, Route } from 'react-router-dom';
 
+// modules
+import { lazily } from 'react-lazily';
+
+// meta-components
+import { ErrorBoundary } from '@/meta-components';
+
 // pages
-import { CanvasStarterPage } from '@/pages';
+const { CanvasStarterPage } = lazily(() => import('@/pages'));
 
 function App() {
   return (
-    <>
-      <Routes>
-        <Route path="canvas-starter" element={<CanvasStarterPage />} />
-      </Routes>
-    </>
+    <ErrorBoundary>
+      <Suspense fallback={<div>Page Loading...</div>}>
+        <Routes>
+          <Route path="canvas-starter" element={<CanvasStarterPage />} />
+        </Routes>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 
