@@ -7,6 +7,9 @@ import reportWebVitals from './reportWebVitals';
 // routers
 import { BrowserRouter } from 'react-router-dom';
 
+// styled-component
+import { ThemeProvider } from 'styled-components';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );

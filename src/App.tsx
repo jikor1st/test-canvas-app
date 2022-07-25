@@ -11,13 +11,14 @@ import { lazily } from 'react-lazily';
 import { ErrorBoundary } from '@/meta-components';
 
 // pages
-const { CanvasStarterPage } = lazily(() => import('@/pages'));
+const { CanvasStarterPage, Test } = lazily(() => import('@/pages'));
 
 function App() {
   return (
     <ErrorBoundary>
       <Suspense fallback={<div>Page Loading...</div>}>
         <Routes>
+          <Route path="test" element={<Test />} />
           <Route path="canvas-starter" element={<CanvasStarterPage />} />
         </Routes>
       </Suspense>
