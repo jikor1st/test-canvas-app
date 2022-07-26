@@ -8,7 +8,7 @@ import { Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from '@/meta-components';
 
 // containers
-import { NavigationContainer } from '@/containers';
+import { PageLayoutsContainer, NavigationContainer } from '@/containers';
 
 // constants
 import { ROUTES } from '@/core/constants';
@@ -16,19 +16,18 @@ import { ROUTES } from '@/core/constants';
 function App() {
   return (
     <>
-      <NavigationContainer />
       <ErrorBoundary>
-        <Suspense fallback={<div>Page Loading...</div>}>
-          <Routes>
-            {ROUTES.map(({ path, element }) => (
-              <Route
-                path={path}
-                element={React.createElement(element)}
-                key={path}
-              />
-            ))}
-          </Routes>
-        </Suspense>
+        <Routes>
+          {ROUTES.map(({ path, element }) => (
+            <Route
+              path={path}
+              element={
+                <PageLayoutsContainer page={React.createElement(element)} />
+              }
+              key={path}
+            />
+          ))}
+        </Routes>
       </ErrorBoundary>
     </>
   );
