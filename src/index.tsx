@@ -15,7 +15,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <HashRouter basename={process.env.PUBLIC_URL}>
+    <HashRouter
+    // basename={'https://jikor1st.github.io/test-canvas-app'}
+    >
       <App />
     </HashRouter>
   </React.StrictMode>,

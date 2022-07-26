@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/test-canvas-app/static/css/main.d59278ee.css",
-    "main.js": "/test-canvas-app/static/js/main.e6a49353.js",
+    "main.js": "/test-canvas-app/static/js/main.40e2c0fc.js",
     "static/js/70.3c10de1d.chunk.js": "/test-canvas-app/static/js/70.3c10de1d.chunk.js",
     "static/js/787.8ebe777e.chunk.js": "/test-canvas-app/static/js/787.8ebe777e.chunk.js",
     "static/js/510.140e08ee.chunk.js": "/test-canvas-app/static/js/510.140e08ee.chunk.js",
     "index.html": "/test-canvas-app/index.html",
     "main.d59278ee.css.map": "/test-canvas-app/static/css/main.d59278ee.css.map",
-    "main.e6a49353.js.map": "/test-canvas-app/static/js/main.e6a49353.js.map",
+    "main.40e2c0fc.js.map": "/test-canvas-app/static/js/main.40e2c0fc.js.map",
     "70.3c10de1d.chunk.js.map": "/test-canvas-app/static/js/70.3c10de1d.chunk.js.map",
     "787.8ebe777e.chunk.js.map": "/test-canvas-app/static/js/787.8ebe777e.chunk.js.map",
     "510.140e08ee.chunk.js.map": "/test-canvas-app/static/js/510.140e08ee.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d59278ee.css",
-    "static/js/main.e6a49353.js"
+    "static/js/main.40e2c0fc.js"
   ]
 }
