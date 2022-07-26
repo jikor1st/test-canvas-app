@@ -2,6 +2,7 @@
   "name": "test-canvas-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://jikor1st.github.io/test-canvas-app",
   "dependencies": {
     "@craco/craco": "^7.0.0-alpha.3",
     "@reduxjs/toolkit": "^1.8.3",
