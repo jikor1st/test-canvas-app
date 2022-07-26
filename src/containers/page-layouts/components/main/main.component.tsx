@@ -11,7 +11,7 @@ type MainProps = {
 const Main: React.FC<MainProps> = ({ page }) => {
   return (
     <Container styleSet={{ height: PAGE_LAYOUTS_ELEMENT_INFO.header.height }}>
-      <Suspense fallback={<LoadingPage />}>{page}</Suspense>
+      <Suspense fallback={<>loading</>}>{page}</Suspense>
     </Container>
   );
 };
