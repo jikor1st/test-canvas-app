@@ -1,2 +1,1 @@
-export * from './module.utils';
-export * from './canvas.utils';
+export * from './utils.util';

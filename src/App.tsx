@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import './reset.css';
+import './initial-style.css';
 
 // routers
 import { Routes, Route } from 'react-router-dom';

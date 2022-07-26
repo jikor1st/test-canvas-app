@@ -1,11 +1,11 @@
-import { useEffect, useState, useRef, MouseEvent, Suspense } from 'react';
+import { useEffect, useState, useRef, PointerEvent, Suspense } from 'react';
 import styled from 'styled-components';
 
 // modules
 import { lazily } from 'react-lazily';
 
 // utils
-import { contextDot } from '@/lib/utils';
+import { utils } from '@/lib/utils';
 
 // base-components
 const { BaseCanvas } = lazily(() => import('@/base-components'));
@@ -37,9 +37,9 @@ const CanvasSmoothDrawPage = () => {
       width = innerWidth;
       height = innerHeight;
     } else {
-      const { clientWidth, clientHeight } = target as HTMLElement;
-      width = clientWidth;
-      height = clientHeight;
+      const { offsetWidth, offsetHeight } = target as HTMLElement;
+      width = offsetWidth;
+      height = offsetHeight;
     }
 
     const resultWidth = width * pixelRatio;
@@ -68,13 +68,13 @@ const CanvasSmoothDrawPage = () => {
     canvasContextSetting(canvasEl);
   };
 
-  const handleMouseDown = ({ nativeEvent }: MouseEvent) => {
+  const handlePointerDown = ({ nativeEvent }: PointerEvent) => {
     if (!contextRef.current) return;
     setIsDown(true);
 
     const { offsetX, offsetY } = nativeEvent;
 
-    contextDot(contextRef.current, {
+    utils.context.drawDot(contextRef.current, {
       x: offsetX,
       y: offsetY,
       radius: contextRef.current.lineWidth / 2,
@@ -83,7 +83,7 @@ const CanvasSmoothDrawPage = () => {
     pptsRef.current.push({ x: offsetX, y: offsetY });
   };
 
-  const handleMouseMove = ({ nativeEvent }: MouseEvent) => {
+  const handlePointerMove = ({ nativeEvent }: PointerEvent) => {
     if (!isDown || !contextRef.current) return;
 
     const { offsetX, offsetY } = nativeEvent;
@@ -91,20 +91,10 @@ const CanvasSmoothDrawPage = () => {
     const ppts = pptsRef.current;
     ppts.push({ x: offsetX, y: offsetY });
 
-    contextRef.current.beginPath();
-    contextRef.current.moveTo(ppts[0].x, ppts[0].y);
-
-    for (let i = 1; i < ppts.length - 2; i++) {
-      const c = (ppts[i].x + ppts[i + 1].x) / 2;
-      const d = (ppts[i].y + ppts[i + 1].y) / 2;
-
-      contextRef.current.quadraticCurveTo(ppts[i].x, ppts[i].y, c, d);
-    }
-
-    contextRef.current.stroke();
+    utils.context.drawLineCurve(contextRef.current, { points: ppts });
   };
 
-  const handleMouseUp = () => {
+  const handlePointerUp = () => {
     setIsDown(false);
     pptsRef.current = [];
   };
@@ -115,9 +105,9 @@ const CanvasSmoothDrawPage = () => {
         <Suspense fallback={<div>캔버스 불러오는중...</div>}>
           <BaseCanvas
             ref={canvasRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
           />
         </Suspense>
       </CanvasWrap>
@@ -131,6 +121,7 @@ const Container = styled.div`
 const CanvasWrap = styled.div`
   width: 100%;
   height: 100%;
+  font-size: 0;
 `;
 
 export { CanvasSmoothDrawPage };
