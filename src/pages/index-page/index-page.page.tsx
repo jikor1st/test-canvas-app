@@ -11,7 +11,9 @@ const IndexPage = () => {
   );
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  padding: 0 20px;
+`;
 const Box = styled.div`
   padding: 50px 0;
   text-align: center;

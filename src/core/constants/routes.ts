@@ -1,6 +1,7 @@
 // modules
 import React from 'react';
-import { lazily } from 'react-lazily';
+// import { lazily } from 'react-lazily';
+import { NamedLazy } from '@/core/modules';
 
 // pages
 const {
@@ -8,7 +9,7 @@ const {
   CanvasBasicDrawPage,
   CanvasSmoothDrawPage,
   CanvasResizeDrawPage,
-} = lazily(() => import('@/pages'));
+} = NamedLazy(() => import('@/pages'), 350);
 
 type RoutesItemType = {
   path: string;

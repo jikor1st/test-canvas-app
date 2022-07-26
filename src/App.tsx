@@ -9,7 +9,7 @@ import { Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from '@/meta-components';
 
 // containers
-import { PageLayoutsContainer, NavigationContainer } from '@/containers';
+import { PageLayoutsContainer } from '@/containers';
 
 // constants
 import { ROUTES } from '@/core/constants';

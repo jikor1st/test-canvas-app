@@ -1,4 +1,4 @@
-import { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 
 import { Header, Main } from './components';
 
@@ -12,9 +12,7 @@ const PageLayoutsContainer: React.FC<PageLayoutsContainerProps> = ({
   return (
     <PageContainer>
       <Header />
-      <Suspense fallback={<div>Page Loading....</div>}>
-        <Main page={page} />
-      </Suspense>
+      <Main page={page} />
     </PageContainer>
   );
 };

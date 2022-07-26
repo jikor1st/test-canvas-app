@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, MouseEvent } from 'react';
+import { useEffect, useState, useRef, PointerEvent } from 'react';
 
 // modules
 import { lazily } from 'react-lazily';
@@ -54,7 +54,7 @@ const CanvasBasicDrawPage = () => {
     canvasContextSetting(canvasEl);
   };
 
-  const handleMouseDown = ({ nativeEvent }: MouseEvent) => {
+  const handlePointerDown = ({ nativeEvent }: PointerEvent) => {
     setIsDown(true);
 
     const context = contextRef.current;
@@ -66,7 +66,7 @@ const CanvasBasicDrawPage = () => {
     context.moveTo(offsetX, offsetY);
   };
 
-  const handleMouseMove = ({ nativeEvent }: MouseEvent) => {
+  const handlePointerMove = ({ nativeEvent }: PointerEvent) => {
     if (!isDown) return;
 
     const context = contextRef.current;
@@ -77,7 +77,7 @@ const CanvasBasicDrawPage = () => {
     context.stroke();
   };
 
-  const handleMouseUp = () => {
+  const handlePointerUp = () => {
     setIsDown(false);
     const context = contextRef.current;
     if (!context) return;
@@ -88,9 +88,9 @@ const CanvasBasicDrawPage = () => {
     <div>
       <BaseCanvas
         ref={canvasRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
       />
     </div>
   );
