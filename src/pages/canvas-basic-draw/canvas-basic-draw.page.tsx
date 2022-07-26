@@ -8,7 +8,7 @@ const { BaseCanvas } = lazily(() => import('@/base-components'));
 
 const pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
 
-const CanvasStarterPage = () => {
+const CanvasBasicDrawPage = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
 
@@ -96,4 +96,4 @@ const CanvasStarterPage = () => {
   );
 };
 
-export { CanvasStarterPage };
+export { CanvasBasicDrawPage };
