@@ -11,17 +11,17 @@ import PolyfillResizeObserver from 'resize-observer-polyfill';
 import styled from 'styled-components';
 
 // modules
-import { lazily } from 'react-lazily';
+import { NamedLazy } from '@/core/modules';
 
 // utils
 import { utils } from '@/lib/utils';
 
 // base-components
-const { BaseCanvas } = lazily(() => import('@/base-components'));
+const { BaseCanvas } = NamedLazy(() => import('@/base-components'));
 
 type pointType = { x: number; y: number };
 
-const CanvasResizeDrawPage = () => {
+const CanvasResizeDrawPage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D>();
@@ -89,19 +89,30 @@ const CanvasResizeDrawPage = () => {
                 ? entry.contentBoxSize[0]
                 : entry.contentBoxSize;
               if (contextRef.current) {
-                canvasInformRef.current.pixelRatio = utils.context.pixelRatio();
-                const temp = contextRef.current.getImageData(
-                  0,
-                  0,
-                  canvasInformRef.current.width,
-                  canvasInformRef.current.height,
-                );
-                canvasSizeSetting(
-                  contentBoxSize.inlineSize,
-                  contentBoxSize.blockSize,
-                );
-                canvasContextSetting(contextRef.current);
-                contextRef.current.putImageData(temp, 0, 0);
+                // canvasInformRef.current.pixelRatio = utils.context.pixelRatio();
+                // const tempSize = canvasInformRef.current;
+                try {
+                  const temp = contextRef.current.getImageData(
+                    0,
+                    0,
+                    canvasInformRef.current.width,
+                    canvasInformRef.current.height,
+                  );
+                  canvasSizeSetting(
+                    contentBoxSize.inlineSize,
+                    contentBoxSize.blockSize,
+                  );
+                  canvasContextSetting(contextRef.current);
+                  contextRef.current.putImageData(
+                    temp,
+                    0,
+                    0,
+                    // 0,
+                    // 0,
+                    // contentBoxSize.inlineSize + tempSize.width,
+                    // contentBoxSize.blockSize + tempSize.height,
+                  );
+                } catch (err) {}
               }
             }
           }
@@ -143,14 +154,12 @@ const CanvasResizeDrawPage = () => {
   return (
     <Container>
       <CanvasWrap ref={containerRef}>
-        <Suspense fallback={<div>캔버스 불러오는중...</div>}>
-          <BaseCanvas
-            ref={canvasRef}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-          />
-        </Suspense>
+        <BaseCanvas
+          ref={canvasRef}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+        />
       </CanvasWrap>
     </Container>
   );

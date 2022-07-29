@@ -2,7 +2,8 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
+/* HTML5 display-role reset for older browsers */
+const resetStyle = `
 html,
 body,
 div,
@@ -91,7 +92,7 @@ video {
   font: inherit;
   vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
+
 article,
 aside,
 details,
@@ -127,3 +128,6 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+`;
+
+export { resetStyle };

@@ -1,6 +1,4 @@
-import React, { Suspense } from 'react';
-import './reset.css';
-import './initial-style.css';
+import React from 'react';
 
 // routers
 import { Routes, Route } from 'react-router-dom';

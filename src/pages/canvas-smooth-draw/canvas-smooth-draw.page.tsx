@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, PointerEvent, Suspense } from 'react';
+import { useEffect, useState, useRef, PointerEvent } from 'react';
 import styled from 'styled-components';
 
 // modules
@@ -13,7 +13,7 @@ const { BaseCanvas } = lazily(() => import('@/base-components'));
 const pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
 type pointType = { x: number; y: number };
 
-const CanvasSmoothDrawPage = () => {
+const CanvasSmoothDrawPage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const contextRef = useRef<CanvasRenderingContext2D>();
@@ -102,14 +102,12 @@ const CanvasSmoothDrawPage = () => {
   return (
     <Container>
       <CanvasWrap ref={containerRef}>
-        <Suspense fallback={<div>캔버스 불러오는중...</div>}>
-          <BaseCanvas
-            ref={canvasRef}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-          />
-        </Suspense>
+        <BaseCanvas
+          ref={canvasRef}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+        />
       </CanvasWrap>
     </Container>
   );

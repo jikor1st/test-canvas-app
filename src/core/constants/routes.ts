@@ -1,6 +1,5 @@
 // modules
 import React from 'react';
-// import { lazily } from 'react-lazily';
 import { NamedLazy } from '@/core/modules';
 
 // pages
@@ -9,6 +8,8 @@ const {
   CanvasBasicDrawPage,
   CanvasSmoothDrawPage,
   CanvasResizeDrawPage,
+  CanvasOptimizedDrawPage,
+  CanvasColorWidthDrawPage,
 } = NamedLazy(() => import('@/pages'), 350);
 
 type RoutesItemType = {
@@ -23,17 +24,27 @@ const ROUTES: RoutesItemType[] = [
     element: IndexPage,
     nav: '홈',
   },
-  { path: 'canvas-basic-draw', element: CanvasBasicDrawPage, nav: '기본' },
   {
-    path: 'canvas-smooth-draw',
-    element: CanvasSmoothDrawPage,
-    nav: '부드러운',
+    path: 'canvas-color-width-draw',
+    element: CanvasColorWidthDrawPage,
+    nav: '컬러와 넓이',
   },
   {
-    path: 'canvas-resize-draw',
-    element: CanvasResizeDrawPage,
-    nav: '가변적인',
+    path: 'canvas-optimized-draw',
+    element: CanvasOptimizedDrawPage,
+    nav: '최적화',
   },
+  // { path: 'canvas-basic-draw', element: CanvasBasicDrawPage, nav: '기본' },
+  // {
+  //   path: 'canvas-smooth-draw',
+  //   element: CanvasSmoothDrawPage,
+  //   nav: '부드러운',
+  // },
+  // {
+  //   path: 'canvas-resize-draw',
+  //   element: CanvasResizeDrawPage,
+  //   nav: '가변적인',
+  // },
 ];
 
 export { ROUTES };
