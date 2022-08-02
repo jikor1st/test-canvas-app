@@ -36,7 +36,7 @@ const CanvasZoomDrawPage: React.FC = () => {
 
   // object
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
-
+  const pixelRatioRef = useRef<number>(utils.context.pixelRatio());
   const pointsRef: any = useRef({
     down: [],
     move: [],
@@ -72,9 +72,8 @@ const CanvasZoomDrawPage: React.FC = () => {
 
     const getContext = canvasElRef.current.getContext('2d');
     if (!getContext) return;
+    getContext.scale(pixelRatioRef.current, pixelRatioRef.current);
     contextRef.current = getContext;
-    contextRef.current.canvas.width = containerRect.width;
-    contextRef.current.canvas.height = containerRect.height;
 
     drawCanvas();
   };
@@ -227,9 +226,16 @@ const CanvasZoomDrawPage: React.FC = () => {
       canvasElRef.current.height,
     );
     utils.method.setTransform(contextRef.current, {
-      scale: { h: zoomState, v: zoomState },
-      move: { h: translate.x, v: translate.y },
+      scale: {
+        h: zoomState,
+        v: zoomState,
+      },
+      move: {
+        h: translate.x,
+        v: translate.y,
+      },
     });
+
     drawCanvas();
   };
 
