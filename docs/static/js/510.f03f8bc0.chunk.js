@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunktest_canvas_app=self.webpackChunktest_canvas_app||[]).push([[510],{510:function(n,a,e){e.r(a),e.d(a,{BaseCanvas:function(){return h}});var t,s=e(168),c=e(683),r=e(791),u=e(31),f=e(184),h=r.forwardRef((function(n,a){return(0,f.jsx)(i,(0,c.Z)((0,c.Z)({ref:a},n),{},{children:"\ud574\ub2f9 \ube0c\ub77c\uc6b0\uc800\uac00 \uce94\ubc84\uc2a4\ub97c \uc9c0\uc6d0\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4."}))})),i=u.ZP.canvas(t||(t=(0,s.Z)(["\n  width: 100%;\n  height: 100%;\n  touch-action: none;\n"])))}}]);
-//# sourceMappingURL=510.f03f8bc0.chunk.js.map
