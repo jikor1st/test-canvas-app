@@ -26,6 +26,8 @@ const CanvasOptimizedDrawPage: React.FC = () => {
     pixelRatio: utils.context.pixelRatio(),
   });
 
+  const containerResizeObserverRef = useRef<ResizeObserver>();
+
   // variable
   const startPointRef = useRef({ x: 0, y: 0 });
   const movePointsRef = useRef<pointType[]>([]);
@@ -33,7 +35,7 @@ const CanvasOptimizedDrawPage: React.FC = () => {
 
   useEffect(() => {
     init();
-
+    initObserver();
     return () => {};
   }, []);
 
@@ -48,20 +50,56 @@ const CanvasOptimizedDrawPage: React.FC = () => {
     informRef.current.stageHeight = resultHeight;
   };
 
+  const canvasContextSetting = (context: CanvasRenderingContext2D) => {
+    context.scale(informRef.current.pixelRatio, informRef.current.pixelRatio);
+    context.lineCap = 'round';
+    context.strokeStyle = 'black';
+    context.lineWidth = 3;
+
+    return context;
+  };
+
   const init = () => {
-    if (!canvasElRef.current || !canvasElRef.current) return;
+    if (!canvasElRef.current) return;
     const { clientWidth, clientHeight } = canvasElRef.current;
     canvasSizeSetting(clientWidth, clientHeight);
     const getContext = canvasElRef.current.getContext('2d');
     if (!getContext) return;
-    getContext.scale(
-      informRef.current.pixelRatio,
-      informRef.current.pixelRatio,
-    );
-    getContext.lineCap = 'round';
-    getContext.strokeStyle = 'black';
-    getContext.lineWidth = 10;
-    contextRef.current = getContext;
+    const context = canvasContextSetting(getContext);
+    contextRef.current = context;
+  };
+
+  const initObserver = () => {
+    if (!containerElRef.current) return;
+    containerResizeObserverRef.current = window.ResizeObserver
+      ? new ResizeObserver(entries => {
+          for (let entry of entries) {
+            if (entry.contentBoxSize) {
+              const contentBoxSize = Array.isArray(entry.contentBoxSize)
+                ? entry.contentBoxSize[0]
+                : entry.contentBoxSize;
+              if (contextRef.current) {
+                try {
+                  const temp = contextRef.current.getImageData(
+                    0,
+                    0,
+                    informRef.current.stageWidth,
+                    informRef.current.stageHeight,
+                  );
+                  canvasSizeSetting(
+                    contentBoxSize.inlineSize,
+                    contentBoxSize.blockSize,
+                  );
+                  const context = canvasContextSetting(contextRef.current);
+                  contextRef.current = context;
+                  contextRef.current.putImageData(temp, 0, 0);
+                } catch (err) {}
+              }
+            }
+          }
+        })
+      : new PolyfillResizeObserver(entries => {});
+    containerResizeObserverRef.current.observe(containerElRef.current);
   };
 
   const handlePointerDown = ({ nativeEvent }: PointerEvent) => {
@@ -100,7 +138,8 @@ const CanvasOptimizedDrawPage: React.FC = () => {
   };
 
   const handlePointerUp = () => {
-    if (!isDown || !contextRef.current) return;
+    setIsDown(false);
+    if (!contextRef.current) return;
     if (movePointsRef.current.length > 3) {
       const { context } = utils.context.drawLineQuadraticWithPoints(
         contextRef.current,
@@ -111,7 +150,6 @@ const CanvasOptimizedDrawPage: React.FC = () => {
       );
       contextRef.current = context;
     }
-    setIsDown(false);
     movePointsRef.current = [];
     startPointRef.current = { x: 0, y: 0 };
   };

@@ -10,6 +10,7 @@ const {
   CanvasResizeDrawPage,
   CanvasOptimizedDrawPage,
   CanvasColorWidthDrawPage,
+  CanvasZoomDrawPage,
 } = NamedLazy(() => import('@/pages'), 350);
 
 type RoutesItemType = {
@@ -33,6 +34,11 @@ const ROUTES: RoutesItemType[] = [
     path: 'canvas-optimized-draw',
     element: CanvasOptimizedDrawPage,
     nav: '최적화',
+  },
+  {
+    path: 'canvas-zoom-draw',
+    element: CanvasZoomDrawPage,
+    nav: '확대축소',
   },
   // { path: 'canvas-basic-draw', element: CanvasBasicDrawPage, nav: '기본' },
   // {

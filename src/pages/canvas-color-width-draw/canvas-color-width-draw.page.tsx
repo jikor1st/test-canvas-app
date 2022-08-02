@@ -14,7 +14,6 @@ import { ColorWidthToolsContainer } from '@/containers';
 const { BaseCanvas } = NamedLazy(() => import('@/base-components'));
 
 type pointType = { x: number; y: number };
-type HEXType = `#${string}`;
 
 const CanvasColorWidthDrawPage: React.FC = () => {
   // element
@@ -146,12 +145,19 @@ const CanvasColorWidthDrawPage: React.FC = () => {
     const numValue = parseInt(e.target.value, 10);
     setLineWidth(prev => (prev !== numValue ? numValue : prev));
   };
+  const handleClickSave = () => {
+    if (!contextRef.current || !canvasElRef.current) return;
+    utils.context.canvasDownloadImage(canvasElRef.current, {
+      imgName: 'test',
+    });
+  };
 
   return (
     <Container>
       <ColorWidthToolsContainer
         onChangeColor={handleChangeColor}
         onChangeRange={handleChangeRange}
+        onClickSave={handleClickSave}
         color={color}
         lineWidth={lineWidth}
       />

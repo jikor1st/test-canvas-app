@@ -74,6 +74,49 @@ function drawLineQuadraticWithPoints(
 
   return { context, endPoint };
 }
+function canvasToDataUrl(
+  canvasEl: HTMLCanvasElement,
+  { type, quality }: { type?: string; quality?: number },
+) {
+  const imgType = type ?? 'image/jpeg';
+  const imgQuality = quality ?? 1.0;
+  try {
+    const dataURL = canvasEl.toDataURL(imgType, imgQuality);
+    return {
+      url: dataURL,
+      type: imgType,
+      quality: imgQuality,
+    };
+  } catch {
+    throw new Error();
+  }
+}
+function canvasDownloadImage(
+  canvasEl: HTMLCanvasElement,
+  {
+    imgName,
+    imgType,
+    imgQuality,
+  }: { imgName: string; imgType?: string; imgQuality?: number },
+) {
+  const { url, type } = canvasToDataUrl(canvasEl, {
+    type: imgType,
+    quality: imgQuality,
+  });
+
+  try {
+    const imgExtension = type.toString().trim().split('/')[1];
+
+    let link: HTMLAnchorElement | undefined = document.createElement('a');
+    link.download = `${imgName ?? 'download'}.${imgExtension}`;
+    link.href = url;
+    link.click();
+
+    link = undefined;
+  } catch {
+    throw new Error('Failed to download img');
+  }
+}
 
 const contextUtils = {
   pixelRatio,
@@ -81,6 +124,7 @@ const contextUtils = {
   drawDot,
   drawLineCurve,
   drawLineQuadraticWithPoints,
+  canvasDownloadImage,
 };
 
 export { contextUtils };

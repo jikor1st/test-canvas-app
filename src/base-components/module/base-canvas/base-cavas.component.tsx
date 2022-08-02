@@ -30,8 +30,6 @@ const BaseCanvas = React.forwardRef<HTMLCanvasElement, BaseCanvasProps>(
 );
 
 const Canvas = styled.canvas`
-  width: 100%;
-  height: 100%;
   touch-action: none;
 `;
 
