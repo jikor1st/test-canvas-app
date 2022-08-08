@@ -3,8 +3,8 @@ import React, {
   useEffect,
   useState,
   useRef,
-  PointerEvent as ReactPointerEvent,
   useCallback,
+  PointerEvent as ReactPointerEvent,
 } from 'react';
 
 import styled from 'styled-components';
@@ -25,11 +25,11 @@ const { BaseCanvas } = NamedLazy(() => import('@/base-components'));
 
 type pointType = { x: number; y: number };
 
-const ZOOM_DIGIT = 200;
+const ZOOM_PERCENT_DIGIT = 200;
 const ZOOM_MIN = 0.1;
 const ZOOM_MAX = 4;
 
-const CanvasZoomDrawPage: React.FC = () => {
+const CanvasZoomMovePage: React.FC = () => {
   // element
   const containerElRef = useRef<HTMLDivElement>(null);
   const canvasElRef = useRef<HTMLCanvasElement>(null);
@@ -44,7 +44,7 @@ const CanvasZoomDrawPage: React.FC = () => {
   const distanceRef = useRef({
     down: 0,
     move: 0,
-    up: ZOOM_DIGIT,
+    up: ZOOM_PERCENT_DIGIT,
   });
   const centerPosRef = useRef({
     down: { x: 0, y: 0 },
@@ -53,13 +53,54 @@ const CanvasZoomDrawPage: React.FC = () => {
   });
 
   // variable
+  const [keyDown, setKeyDown] = useState<string[]>([]);
   const [isDown, setIsDown] = useState<boolean>(false);
   const [zoom, setZoom] = useState<number>(1);
   const [translate, setTranslate] = useState<pointType>({ x: 0, y: 0 });
 
   useEffect(() => {
+    addEvent();
     init();
+
+    return () => {
+      removeEvent();
+    };
   }, []);
+
+  const handleWindow = (event: KeyboardEvent) => {
+    event.preventDefault();
+    const downKey = event.key;
+    if (event.type === 'keydown') {
+      setKeyDown(prev => {
+        const temp = [...prev];
+        const findIndex = temp.findIndex(item => item === downKey);
+        if (findIndex !== -1) {
+          temp.splice(findIndex, 1);
+        }
+        temp.push(downKey);
+        return temp;
+      });
+    } else if (event.type === 'keyup') {
+      setKeyDown(prev => {
+        const temp = [...prev];
+        const findIndex = temp.findIndex(item => item === downKey);
+        if (findIndex !== -1) {
+          temp.splice(findIndex, 1);
+        }
+        return temp;
+      });
+    }
+  };
+
+  const addEvent = () => {
+    window.addEventListener('keydown', handleWindow);
+    window.addEventListener('keyup', handleWindow);
+  };
+
+  const removeEvent = () => {
+    window.removeEventListener('keydown', handleWindow);
+    window.removeEventListener('keyup', handleWindow);
+  };
 
   const init = () => {
     if (!canvasElRef.current || !canvasElRef.current || !containerElRef.current)
@@ -67,8 +108,10 @@ const CanvasZoomDrawPage: React.FC = () => {
 
     const containerRect = containerElRef.current.getBoundingClientRect();
 
-    canvasElRef.current.width = containerRect.width;
-    canvasElRef.current.height = containerRect.height;
+    canvasElRef.current.width = containerRect.width * pixelRatioRef.current;
+    canvasElRef.current.height = containerRect.height * pixelRatioRef.current;
+    canvasElRef.current.style.width = `${containerRect.width}px`;
+    canvasElRef.current.style.height = `${containerRect.height}px`;
 
     const getContext = canvasElRef.current.getContext('2d');
     if (!getContext) return;
@@ -120,6 +163,13 @@ const CanvasZoomDrawPage: React.FC = () => {
 
     multiPointer(pointsRef.current.down, nativeEvent);
 
+    const [touch1] = pointsRef.current.down;
+    const p1 = {
+      x: touch1.layerX,
+      y: touch1.layerY,
+    };
+    centerPosRef.current.down = p1;
+
     if (pointsRef.current.down.length >= 2) {
       const [touch1, touch2] = pointsRef.current.down;
       const p1 = {
@@ -141,6 +191,24 @@ const CanvasZoomDrawPage: React.FC = () => {
     if (!isDown || !contextRef.current || !canvasElRef.current) return;
 
     multiPointer(pointsRef.current.move, nativeEvent);
+
+    if (keyDown.some(item => item === ' ')) {
+      const [touch1] = pointsRef.current.move;
+      const p1 = {
+        x: touch1.layerX,
+        y: touch1.layerY,
+      };
+      centerPosRef.current.move = p1;
+      const diffCenter = {
+        x: p1.x - centerPosRef.current.down.x + centerPosRef.current.up.x,
+        y: p1.y - centerPosRef.current.down.y + centerPosRef.current.up.y,
+      };
+      setTranslate(prev =>
+        diffCenter.x !== prev.x || diffCenter.y !== prev.y ? diffCenter : prev,
+      );
+
+      return;
+    }
 
     if (pointsRef.current.move.length >= 2) {
       const [touch1, touch2] = pointsRef.current.move;
@@ -166,7 +234,7 @@ const CanvasZoomDrawPage: React.FC = () => {
         diffCenter.x !== prev.x || diffCenter.y !== prev.y ? diffCenter : prev,
       );
 
-      const newZoom = diffDistance / ZOOM_DIGIT;
+      const newZoom = diffDistance / ZOOM_PERCENT_DIGIT;
       setZoom(prev =>
         setZoomMinMax(prev, newZoom, () => {
           distanceRef.current.move = diffDistance;
@@ -182,14 +250,14 @@ const CanvasZoomDrawPage: React.FC = () => {
   ) => {
     if (ZOOM_MIN <= newValue && newValue <= ZOOM_MAX) {
       typeof isValid === 'function' && isValid();
-      return parseFloat(newValue.toFixed(3));
+      return toFixed(newValue);
     } else {
       return prevValue;
     }
   };
 
   const toFixed = (num: number) => {
-    return parseInt(num.toFixed(1));
+    return parseFloat(num.toFixed(3));
   };
 
   const onUp = () => {
@@ -208,7 +276,7 @@ const CanvasZoomDrawPage: React.FC = () => {
       });
     },
     [translate, zoom],
-    { componentDidUpdateCondition: true },
+    { componentDidMountCondition: false },
   );
 
   const redraw = ({
@@ -219,23 +287,23 @@ const CanvasZoomDrawPage: React.FC = () => {
     zoomState: number;
   }) => {
     if (!contextRef.current || !canvasElRef.current) return;
+    contextRef.current.beginPath();
     contextRef.current.clearRect(
       0,
       0,
-      canvasElRef.current.width,
-      canvasElRef.current.height,
+      canvasElRef.current.width * pixelRatioRef.current,
+      canvasElRef.current.height * pixelRatioRef.current,
     );
     utils.method.setTransform(contextRef.current, {
       scale: {
-        h: zoomState,
-        v: zoomState,
+        h: zoomState * pixelRatioRef.current,
+        v: zoomState * pixelRatioRef.current,
       },
       move: {
-        h: translate.x,
-        v: translate.y,
+        h: translate.x * pixelRatioRef.current,
+        v: translate.y * pixelRatioRef.current,
       },
     });
-
     drawCanvas();
   };
 
@@ -243,14 +311,14 @@ const CanvasZoomDrawPage: React.FC = () => {
     const digit = 0.1;
     if (value === '+') {
       setZoom(prev =>
-        setZoomMinMax(prev, toFixed(prev + digit), () => {
-          distanceRef.current.move = toFixed(prev + digit) * ZOOM_DIGIT;
+        setZoomMinMax(prev, prev + digit, () => {
+          distanceRef.current.move = toFixed(prev + digit) * ZOOM_PERCENT_DIGIT;
         }),
       );
     } else if (value === '-') {
       setZoom(prev =>
-        setZoomMinMax(prev, toFixed(prev - digit), () => {
-          distanceRef.current.move = toFixed(prev - digit) * ZOOM_DIGIT;
+        setZoomMinMax(prev, prev - digit, () => {
+          distanceRef.current.move = toFixed(prev - digit) * ZOOM_PERCENT_DIGIT;
         }),
       );
     }
@@ -276,15 +344,21 @@ const CanvasZoomDrawPage: React.FC = () => {
   );
 };
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
 `;
 const CanvasWrap = styled.div`
-  width: 100%;
-  height: calc(100% - 50px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
   font-size: 0;
-  position: relative;
+  inset: 120px 0 0 0;
   background: #cccccc;
+  overflow: hidden;
 `;
 
-export { CanvasZoomDrawPage };
+export { CanvasZoomMovePage };

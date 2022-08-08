@@ -10,7 +10,7 @@ type MainProps = {
 
 const Main: React.FC<MainProps> = ({ page }) => {
   return (
-    <Container styleSet={{ height: PAGE_LAYOUTS_ELEMENT_INFO.header.height }}>
+    <Container>
       <Suspense fallback={<LoadingPage />}>{page}</Suspense>
     </Container>
   );
@@ -27,16 +27,13 @@ const LoadingPage = () => {
 };
 
 const Container = styled.main`
-  ${({ styleSet }: { styleSet: { height: number } }) =>
-    css`
-      height: calc(100vh - ${styleSet.height}px);
-    `}
   width: 100%;
+  height: auto;
 `;
 
 const LoadingContainer = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: #bfc0c2;
   position: relative;
 `;
@@ -47,7 +44,7 @@ const Spin = keyframes`
 const LoadingBox = styled.div`
   position: absolute;
   left: 50%;
-  top: 35%;
+  top: 50%;
   transform: translate(-50%, -50%);
 `;
 const LoadingIndicator = styled.div`

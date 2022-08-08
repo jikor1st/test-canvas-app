@@ -158,6 +158,8 @@ const CanvasOptimizedDrawPage: React.FC = () => {
     <Container>
       <CanvasWrap ref={containerElRef}>
         <BaseCanvas
+          fullWidth
+          fullHeight
           ref={canvasElRef}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}

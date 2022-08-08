@@ -10,7 +10,8 @@ const {
   CanvasResizeDrawPage,
   CanvasOptimizedDrawPage,
   CanvasColorWidthDrawPage,
-  CanvasZoomDrawPage,
+  CanvasZoomMovePage,
+  CanvasToolsModulePage,
 } = NamedLazy(() => import('@/pages'), 350);
 
 type RoutesItemType = {
@@ -36,9 +37,14 @@ const ROUTES: RoutesItemType[] = [
     nav: '최적화',
   },
   {
-    path: 'canvas-zoom-draw',
-    element: CanvasZoomDrawPage,
+    path: 'canvas-zoom-move',
+    element: CanvasZoomMovePage,
     nav: '확대축소',
+  },
+  {
+    path: 'canvas-tools-module',
+    element: CanvasToolsModulePage,
+    nav: '툴',
   },
   // { path: 'canvas-basic-draw', element: CanvasBasicDrawPage, nav: '기본' },
   // {

@@ -1,3 +1,7 @@
+function pixelRatio(): number {
+  return window.devicePixelRatio > 1 ? 2 : 1;
+}
+
 type SetTransformOptionsProps = {
   scale?: {
     h?: number;
@@ -12,10 +16,25 @@ type SetTransformOptionsProps = {
     v?: number;
   };
 };
+function transform(
+  context: CanvasRenderingContext2D,
+  transformOptions?: SetTransformOptionsProps,
+) {
+  const { scale, skew, move } = transformOptions ?? {};
+  context.transform(
+    scale?.h ?? 1,
+    skew?.h ?? 0,
+    skew?.v ?? 0,
+    scale?.v ?? 1,
+    move?.h ?? 0,
+    move?.v ?? 0,
+  );
+}
 function setTransform(
   context: CanvasRenderingContext2D,
-  { scale, skew, move }: SetTransformOptionsProps,
+  transformOptions?: SetTransformOptionsProps,
 ) {
+  const { scale, skew, move } = transformOptions ?? {};
   context.setTransform(
     scale?.h ?? 1,
     skew?.h ?? 0,
@@ -26,6 +45,6 @@ function setTransform(
   );
 }
 
-const methodUtils = { setTransform };
+const methodUtils = { pixelRatio, transform, setTransform };
 
 export { methodUtils };

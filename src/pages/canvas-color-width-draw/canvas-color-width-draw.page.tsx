@@ -163,6 +163,8 @@ const CanvasColorWidthDrawPage: React.FC = () => {
       />
       <CanvasWrap ref={containerElRef}>
         <BaseCanvas
+          fullWidth
+          fullHeight
           ref={canvasElRef}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
